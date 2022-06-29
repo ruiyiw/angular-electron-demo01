@@ -46,7 +46,9 @@ export class AppComponent {
   BtThree_Click(){
     
     //alert("按钮3事件");
-    this.router.navigate(['/regionmac']);
+    // this.router.navigate(['/regionmac']);
+    // ruiyiw
+    this.router.navigate(['/message']);
 
 
   }

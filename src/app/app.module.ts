@@ -18,6 +18,9 @@ import { FormComponent } from './components/form/form.component';
 import { SearchComponent } from './components/search/search.component';
 import { TodolistComponent } from './components/todolist/todolist.component';
 
+// ruiyiw
+import { DataTablesModule } from 'angular-datatables';
+
 import zh from '@angular/common/locales/zh';
 
 
@@ -56,6 +59,7 @@ registerLocaleData(zh);
     HttpClientModule,
     CoreModule, 
     AppRoutingModule,  
+    DataTablesModule, // ruiyiw
    /*  MenuModule, */ /* HMI用 */
    
     TranslateModule.forRoot({

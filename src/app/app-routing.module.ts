@@ -19,7 +19,11 @@ const routes: Routes = [
   { path: 'form', component:FormComponent},
 
   { path: 'search', component:SearchComponent},
- 
+  
+  // ruiyiw 
+  { path: 'message', 
+    loadChildren:()=>import('./module/message/message.module').then(m=>m.MessageModule)
+  },
 
   { 
     path: 'user', 
