@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Subject } from 'rxjs';
-import { MsgList } from './MsgList';
+import { elementAt, Subject } from 'rxjs';
+import { ErrorMessage, MsgList } from './MsgList';
 
 @Component({
   selector: 'app-msgtable',
@@ -12,7 +12,7 @@ import { MsgList } from './MsgList';
 export class MsgtableComponent implements OnInit, OnDestroy {
 
   dtOptions: DataTables.Settings = {};
-  msglists: MsgList[];
+  msglists: Array<MsgList> = new Array<MsgList>();
 
   dtTrigger: Subject<any> = new Subject<any>();
 
@@ -32,9 +32,13 @@ export class MsgtableComponent implements OnInit, OnDestroy {
 
   getErrorMessages(){
     this.httpClient.get<any>('https://localhost:7194/api/Panel').subscribe(
-      response => {
+      (response: Array<ErrorMessage>) => {
         console.log(response);
-        this.msglists = response;
+        response.forEach(element => {
+          const msg: MsgList = new MsgList(element.name, element.sensorNo, element.time, element.objectType, element.address);
+          this.msglists.push(msg);
+        });
+        console.log(this.msglists);
         // Calling the DT trigger to manually render the table
         this.dtTrigger.next(null);
       }

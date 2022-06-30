@@ -1,9 +1,24 @@
 export class MsgList {
-  constructor(
-    public name: string,
-    public sensorNo: string,
-    public time: string,
-    public objectType: string,
-    public address: number
-  ){}
+  visibility: boolean;
+  name: string;
+  sensorNo: string;
+  time: string;
+  objectType: string;
+  address: number;
+  constructor(name: string, sensorNo: string, time: string, objectType: string, address: number) {
+    this.visibility = true;
+    this.name = name;
+    this.sensorNo = sensorNo;
+    this.time = time;
+    this.objectType = objectType;
+    this.address = address;
+  }
+}
+
+export interface ErrorMessage{
+  name: string;
+  sensorNo: string;
+  time: string;
+  objectType: string;
+  address: number;
 }

@@ -12,8 +12,8 @@
         </tr>
     </thead>
 
-    <tbody>
-        <tr *ngFor="let msglist of msglists">
+    <tbody *ngFor="let msglist of msglists">
+        <tr *ngIf="msglist.visibility">
             <td>{{ msglist.name }}</td>
             <td>{{ msglist.sensorNo }}</td>
             <td>{{ msglist.time }}</td>
@@ -21,4 +21,4 @@
             <td>{{ msglist.address }}</td>
         </tr>
     </tbody>
- </table>
+</table>
