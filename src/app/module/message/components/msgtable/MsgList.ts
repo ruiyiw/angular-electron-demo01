@@ -1,7 +1,9 @@
 export class MsgList {
-    name: string;
-    sensorNo: string;
-    time: string;
-    objectType: string;
-    address: number;
-  }
+  constructor(
+    public name: string,
+    public sensorNo: string,
+    public time: string,
+    public objectType: string,
+    public address: number
+  ){}
+}

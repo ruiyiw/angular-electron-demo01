@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http'
+import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs';
 import { MsgList } from './MsgList';
 
@@ -12,7 +12,7 @@ import { MsgList } from './MsgList';
 export class MsgtableComponent implements OnInit, OnDestroy {
 
   dtOptions: DataTables.Settings = {};
-  msglists : MsgList[] = [];
+  msglists: MsgList[];
 
   dtTrigger: Subject<any> = new Subject<any>();
 
@@ -20,21 +20,25 @@ export class MsgtableComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    this.msglists = [];
+    // this.msglists = [];
 
     this.dtOptions = {
         pagingType: 'full_numbers',
         pageLength: 2,
       };
 
-    // TODO: huixinz
-    
-    this.httpClient.get<MsgList[]>('assets/data.json')
-      .subscribe(data => {
-        this.msglists = (data as any).data;
+    this.getErrorMessages();
+  }
+
+  getErrorMessages(){
+    this.httpClient.get<any>('https://localhost:7194/api/Panel').subscribe(
+      response => {
+        console.log(response);
+        this.msglists = response;
         // Calling the DT trigger to manually render the table
         this.dtTrigger.next(null);
-      });
+      }
+    );
   }
 
   ngOnDestroy(): void {
@@ -43,3 +47,4 @@ export class MsgtableComponent implements OnInit, OnDestroy {
   }
 
 }
+
