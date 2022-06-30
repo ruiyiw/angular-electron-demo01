@@ -1,5 +1,7 @@
 export class MsgList {
-    id: number;
-    firstName: string;
-    lastName: string;
+    name: string;
+    sensorNo: string;
+    time: string;
+    objectType: string;
+    address: number;
   }

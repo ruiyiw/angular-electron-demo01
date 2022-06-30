@@ -26,6 +26,8 @@ export class MsgtableComponent implements OnInit, OnDestroy {
         pagingType: 'full_numbers',
         pageLength: 2,
       };
+
+    // TODO: huixinz
     
     this.httpClient.get<MsgList[]>('assets/data.json')
       .subscribe(data => {
