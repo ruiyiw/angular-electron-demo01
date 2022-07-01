@@ -28,7 +28,7 @@
     <ng-template #second>
         <ng-container *ngIf="status === 2; else third">
             <tbody *ngFor="let msglist of msglists">
-                <tr *ngIf="msglist.visibility">
+                <tr *ngIf="msglist.visibility" (click)="setHighlight(msglist.id)" [ngClass]="{'selected': msglist.id === selectedItem}">
                     <td>{{ msglist.name }}</td>
                     <td>{{ msglist.sensorNo }}</td>
                     <td>{{ msglist.time }}</td>
@@ -41,7 +41,7 @@
 
     <ng-template #third>
         <tbody *ngFor="let msglist of msglists">
-            <tr *ngIf="!msglist.visibility">
+            <tr *ngIf="!msglist.visibility" (click)="setHighlight(msglist.id)" [ngClass]="{'selected': msglist.id === selectedItem}">
                 <td>{{ msglist.name }}</td>
                 <td>{{ msglist.sensorNo }}</td>
                 <td>{{ msglist.time }}</td>
