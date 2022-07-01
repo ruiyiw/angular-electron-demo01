@@ -13,7 +13,7 @@ export class MsgtableComponent implements OnInit, OnDestroy {
 
   dtOptions: DataTables.Settings = {};
   msglists: Array<MsgList> = new Array<MsgList>();
-  status: Status = Status.blocked;
+  status: Status = Status.current;
 
   dtTrigger: Subject<any> = new Subject<any>();
 
@@ -34,7 +34,6 @@ export class MsgtableComponent implements OnInit, OnDestroy {
   getErrorMessages(){
     this.httpClient.get<any>('https://localhost:7194/api/Panel').subscribe(
       (response: Array<ErrorMessage>) => {
-        console.log(response);
         response.forEach(element => {
           const msg: MsgList = new MsgList(element.name, element.sensorNo, element.time, element.objectType, element.address);
           this.msglists.push(msg);
@@ -44,6 +43,21 @@ export class MsgtableComponent implements OnInit, OnDestroy {
         this.dtTrigger.next(null);
       }
     );
+  }
+
+  seeDefinedMsgs() {
+    this.status = Status.defined;
+    console.log('Set status to defined');
+  }
+
+  seeCurrentMsgs() {
+    this.status = Status.current;
+    console.log('Set status to current');
+  }
+
+  seeBlockedMsgs() {
+    this.status = Status.blocked;
+    console.log('Set status to blocked');
   }
 
   ngOnDestroy(): void {
