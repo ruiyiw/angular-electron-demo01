@@ -22,3 +22,9 @@ export interface ErrorMessage{
   objectType: string;
   address: number;
 }
+
+export enum Status{
+  defined = 1,
+  current,
+  blocked,
+}

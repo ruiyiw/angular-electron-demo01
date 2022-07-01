@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { elementAt, Subject } from 'rxjs';
-import { ErrorMessage, MsgList } from './MsgList';
+import { ErrorMessage, MsgList, Status } from './MsgList';
 
 @Component({
   selector: 'app-msgtable',
@@ -13,6 +13,7 @@ export class MsgtableComponent implements OnInit, OnDestroy {
 
   dtOptions: DataTables.Settings = {};
   msglists: Array<MsgList> = new Array<MsgList>();
+  status: Status = Status.blocked;
 
   dtTrigger: Subject<any> = new Subject<any>();
 

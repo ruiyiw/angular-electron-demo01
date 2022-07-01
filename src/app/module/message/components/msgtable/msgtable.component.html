@@ -12,13 +12,44 @@
         </tr>
     </thead>
 
-    <tbody *ngFor="let msglist of msglists">
-        <tr *ngIf="msglist.visibility">
-            <td>{{ msglist.name }}</td>
-            <td>{{ msglist.sensorNo }}</td>
-            <td>{{ msglist.time }}</td>
-            <td>{{ msglist.objectType }}</td>
-            <td>{{ msglist.address }}</td>
-        </tr>
-    </tbody>
+    <ng-container *ngIf="status === 1; else second">
+        <tbody>
+            <tr *ngFor="let msglist of msglists">
+                <td>{{ msglist.name }}</td>
+                <td>{{ msglist.sensorNo }}</td>
+                <td>{{ msglist.time }}</td>
+                <td>{{ msglist.objectType }}</td>
+                <td>{{ msglist.address }}</td>
+            </tr>
+        </tbody>
+    </ng-container>
+
+
+    <ng-template #second>
+        <ng-container *ngIf="status === 2; else third">
+            <tbody *ngFor="let msglist of msglists">
+                <tr *ngIf="msglist.visibility">
+                    <td>{{ msglist.name }}</td>
+                    <td>{{ msglist.sensorNo }}</td>
+                    <td>{{ msglist.time }}</td>
+                    <td>{{ msglist.objectType }}</td>
+                    <td>{{ msglist.address }}</td>
+                </tr>
+            </tbody>
+        </ng-container>
+    </ng-template>
+
+    <ng-template #third>
+        <tbody *ngFor="let msglist of msglists">
+            <tr *ngIf="!msglist.visibility">
+                <td>{{ msglist.name }}</td>
+                <td>{{ msglist.sensorNo }}</td>
+                <td>{{ msglist.time }}</td>
+                <td>{{ msglist.objectType }}</td>
+                <td>{{ msglist.address }}</td>
+            </tr>
+        </tbody>
+    </ng-template>
+
+
 </table>
