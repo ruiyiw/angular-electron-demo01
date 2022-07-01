@@ -13,7 +13,8 @@ export class MsgtableComponent implements OnInit, OnDestroy {
 
   dtOptions: DataTables.Settings = {};
   msglists: Array<MsgList> = new Array<MsgList>();
-  status: Status = Status.current;
+  status: Status = Status.defined;
+  selectedItem: number = null;
 
   dtTrigger: Subject<any> = new Subject<any>();
 
@@ -32,10 +33,12 @@ export class MsgtableComponent implements OnInit, OnDestroy {
   }
 
   getErrorMessages(){
+    let cnt = 0;
     this.httpClient.get<any>('https://localhost:7194/api/Panel').subscribe(
       (response: Array<ErrorMessage>) => {
         response.forEach(element => {
-          const msg: MsgList = new MsgList(element.name, element.sensorNo, element.time, element.objectType, element.address);
+          const msg: MsgList = new MsgList(cnt, element.name, element.sensorNo, element.time, element.objectType, element.address);
+          cnt++;
           this.msglists.push(msg);
         });
         console.log(this.msglists);
@@ -58,6 +61,17 @@ export class MsgtableComponent implements OnInit, OnDestroy {
   seeBlockedMsgs() {
     this.status = Status.blocked;
     console.log('Set status to blocked');
+  }
+
+  setHighlight(id: number) {
+    this.selectedItem = id;
+  }
+
+  reverseVisibility() {
+    if (this.selectedItem == null) { return; }
+    console.log(`Change visibility of ${this.selectedItem}`);
+    this.msglists[this.selectedItem].reverseVisibility();
+    this.selectedItem = null;
   }
 
   ngOnDestroy(): void {

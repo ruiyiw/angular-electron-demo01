@@ -14,7 +14,7 @@
 
     <ng-container *ngIf="status === 1; else second">
         <tbody>
-            <tr *ngFor="let msglist of msglists">
+            <tr *ngFor="let msglist of msglists" (click)="setHighlight(msglist.id)" [ngClass]="{'selected': msglist.id === selectedItem}">
                 <td>{{ msglist.name }}</td>
                 <td>{{ msglist.sensorNo }}</td>
                 <td>{{ msglist.time }}</td>
@@ -52,6 +52,7 @@
     </ng-template>
 </table>
 
-<button (click)="seeDefinedMsgs()">定义的</button>
-<button (click)="seeCurrentMsgs()">当前的</button>
-<button (click)="seeBlockedMsgs()">屏蔽的</button>
+<button id="button" (click)="reverseVisibility()">颠倒状态</button>
+<button id="button" (click)="seeDefinedMsgs()">定义的</button>
+<button id="button" (click)="seeCurrentMsgs()">当前的</button>
+<button id="button" (click)="seeBlockedMsgs()">屏蔽的</button>
