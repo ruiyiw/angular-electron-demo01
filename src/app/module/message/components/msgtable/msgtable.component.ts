@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { elementAt, Subject } from 'rxjs';
 import { ErrorMessage, MsgList, Status } from './MsgList';
 import { SignalrService } from '../../../../services/signalr.service';
+import { format } from 'path';
 
 @Component({
   selector: 'app-msgtable',
@@ -16,33 +17,12 @@ export class MsgtableComponent implements OnInit, OnDestroy {
   msglists: Array<MsgList> = new Array<MsgList>();
   status: Status = Status.defined;
   selectedItem: number = null;
+  invisibleMsgs: Set<string> = new Set<string>(); // newly added
 
   dtTrigger: Subject<any> = new Subject<any>();
 
   // constructor(private httpClient: HttpClient) { }
   constructor(private httpClient: HttpClient, public signalRService: SignalrService) { }
-
-  private startHttpRequest = () => {
-    let cnt = 0;
-    this.httpClient.get<any>("https://localhost:7194/api/Panel")
-      .subscribe(
-        res => {
-          console.log(res);
-        }
-      );
-  }
-
-  ngOnInit(): void {
-
-    // this.msglists = [];
-
-    this.dtOptions = {
-        pagingType: 'full_numbers',
-        pageLength: 2,
-      };
-
-    this.getErrorMessages();
-  }
 
   getErrorMessages(){
     // let cnt = 0;
@@ -58,12 +38,12 @@ export class MsgtableComponent implements OnInit, OnDestroy {
     //     this.dtTrigger.next(null);
     //   }
     // );
-    
     // Start SignalR connection
     this.signalRService.startConnection();
     this.signalRService.addTransferTableDataListener();
     this.startHttpRequest();
   }
+
 
   seeDefinedMsgs() {
     this.status = Status.defined;
@@ -87,6 +67,13 @@ export class MsgtableComponent implements OnInit, OnDestroy {
   reverseVisibility() {
     if (this.selectedItem == null) { return; }
     console.log(`Change visibility of ${this.selectedItem}`);
+    const msg = this.msglists[this.selectedItem];
+    const key = `${msg.sensorNo}_${msg.address}`;
+    if (msg.visibility) {
+      this.invisibleMsgs.add(key);
+    } else {
+      this.invisibleMsgs.delete(key);
+    }
     this.msglists[this.selectedItem].reverseVisibility();
     this.selectedItem = null;
   }
@@ -95,6 +82,41 @@ export class MsgtableComponent implements OnInit, OnDestroy {
     // Do not forget to unsubscribe the event
     this.dtTrigger.unsubscribe();
   }
+
+
+  ngOnInit(): void {
+    // this.msglists = [];
+
+    this.dtOptions = {
+        pagingType: 'full_numbers',
+        pageLength: 2,
+      };
+
+    this.getErrorMessages();
+  }
+
+  private startHttpRequest = () => {
+    let cnt = 0;
+    this.httpClient.get<any>('https://localhost:7194/api/Panel')
+      .subscribe(
+        (response: Array<ErrorMessage>) => {
+          this.msglists = new Array<MsgList>();
+          response.forEach(element => {
+            const msg: MsgList = new MsgList(cnt, element.name, element.sensorNo, element.time, element.objectType, element.address);
+            const key = `${element.sensorNo}_${element.address}`;
+            if (this.invisibleMsgs.has(key)) {
+              msg.visibility = false;
+            }
+            cnt++;
+            this.msglists.push(msg);
+          });
+          console.log(this.msglists);
+          // Calling the DT trigger to manually render the table
+          this.dtTrigger.next(null);
+          console.log(response);
+        }
+      );
+  };
 
 }
 
