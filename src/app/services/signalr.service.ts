@@ -7,8 +7,9 @@ import { MsgList } from '../module/message/components/msgtable/MsgList';
 })
 
 export class SignalrService {
-  // public data: Array<MsgList> = new Array<MsgList>();
-  public data: MsgList[];
+  public data: Array<MsgList> = new Array<MsgList>();
+  // public data: MsgList[];
+  public dtOptions: DataTables.Settings = {};
 
   private hubConnection: signalR.HubConnection
     public startConnection = () => {
@@ -22,15 +23,16 @@ export class SignalrService {
     }
 
     public addTransferTableDataListener = () => {
-      // let count = 0;
+      let count = 0;
       this.hubConnection.on("transfertabledata", (data) => {
-        // data.forEach(element => {
-        //   const msg = new MsgList(count, element.name, element.sensorNo, element.time, element.objectType, element.address);
-        //   count++;
-        //   this.data.push(msg);
-        // })
-        this.data = data;
-        console.log(data);
+        this.data = new Array<MsgList>();
+        data.forEach(element => {
+          const msg = new MsgList(count, element.name, element.sensorNo, element.time, element.objectType, element.address);
+          count++;
+          this.data.push(msg);
+        })
+        // this.data = data;
+        console.log(this.data);
       });
     }
 
