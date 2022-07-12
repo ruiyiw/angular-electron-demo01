@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { elementAt, Subject } from 'rxjs';
 import { ErrorMessage, MsgList, Status } from './MsgList';
+import { SignalrService } from '../../../../services/signalr.service';
 
 @Component({
   selector: 'app-msgtable',
@@ -18,7 +19,18 @@ export class MsgtableComponent implements OnInit, OnDestroy {
 
   dtTrigger: Subject<any> = new Subject<any>();
 
-  constructor(private httpClient: HttpClient) { }
+  // constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient, public signalRService: SignalrService) { }
+
+  private startHttpRequest = () => {
+    let cnt = 0;
+    this.httpClient.get<any>("https://localhost:7194/api/Panel")
+      .subscribe(
+        res => {
+          console.log(res);
+        }
+      );
+  }
 
   ngOnInit(): void {
 
@@ -33,19 +45,24 @@ export class MsgtableComponent implements OnInit, OnDestroy {
   }
 
   getErrorMessages(){
-    let cnt = 0;
-    this.httpClient.get<any>('https://localhost:7194/api/Panel').subscribe(
-      (response: Array<ErrorMessage>) => {
-        response.forEach(element => {
-          const msg: MsgList = new MsgList(cnt, element.name, element.sensorNo, element.time, element.objectType, element.address);
-          cnt++;
-          this.msglists.push(msg);
-        });
-        console.log(this.msglists);
-        // Calling the DT trigger to manually render the table
-        this.dtTrigger.next(null);
-      }
-    );
+    // let cnt = 0;
+    // this.httpClient.get<any>('https://localhost:7194/api/Panel').subscribe(
+    //   (response: Array<ErrorMessage>) => {
+    //     response.forEach(element => {
+    //       const msg: MsgList = new MsgList(cnt, element.name, element.sensorNo, element.time, element.objectType, element.address);
+    //       cnt++;
+    //       this.msglists.push(msg);
+    //     });
+    //     console.log(this.msglists);
+    //     // Calling the DT trigger to manually render the table
+    //     this.dtTrigger.next(null);
+    //   }
+    // );
+    
+    // Start SignalR connection
+    this.signalRService.startConnection();
+    this.signalRService.addTransferTableDataListener();
+    this.startHttpRequest();
   }
 
   seeDefinedMsgs() {

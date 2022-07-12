@@ -54,6 +54,7 @@
     "@angular/platform-browser": "13.0.1",
     "@angular/platform-browser-dynamic": "13.0.1",
     "@angular/router": "13.0.1",
+    "@microsoft/signalr": "6.0.6",
     "angular-datatables": "13.1.0",
     "datatables.net": "1.12.1",
     "datatables.net-dt": "1.12.1",
